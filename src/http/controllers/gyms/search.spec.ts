@@ -13,7 +13,7 @@ describe('Search Gyms (e2e)', () => {
   })
 
   it('should be able to search gyms by title', async () => {
-    const { token } = await createAndAuthenticateUser(app)
+    const { token } = await createAndAuthenticateUser(app, true)
 
     await request(app.server)
       .post('/gyms')
@@ -38,13 +38,14 @@ describe('Search Gyms (e2e)', () => {
       })
 
     const response = await request(app.server)
-      .get('/gyms/search')
-      .query({
-        q: 'JavaScript',
-      })
-      .set('Authorization', `Bearer ${token}`)
-      .send()
-
+    .get('/gyms/search')
+    .query({
+      q: 'JavaScript',
+    })
+    .set('Authorization', `Bearer ${token}`)
+    .send()
+    
+    console.log("🚀 ~ it ~ response:", response.body)
     expect(response.statusCode).toEqual(200)
     expect(response.body.gyms).toHaveLength(1)
     expect(response.body.gyms).toEqual([
